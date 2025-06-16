@@ -1,0 +1,99 @@
+@model Mangement.Models.EmployeeTask
+
+@{
+    ViewData["Title"] = "Task Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-info-circle me-2"></i>Task Details</h2>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Title</dt>
+                    <dd class="col-sm-8">@Model.Title</dd>
+
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">@Model.Description</dd>
+
+                    <dt class="col-sm-4">Assigned To</dt>
+                    <dd class="col-sm-8">@Model.AssignedTo?.Name</dd>
+
+                    <dt class="col-sm-4">Created By</dt>
+                    <dd class="col-sm-8">@Model.CreatedBy?.Name</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-4">Start Date</dt>
+                    <dd class="col-sm-8">@Model.StartDate.ToString("MM/dd/yyyy")</dd>
+
+                    <dt class="col-sm-4">Due Date</dt>
+                    <dd class="col-sm-8">@Model.DueDate.ToString("MM/dd/yyyy")</dd>
+
+                    <dt class="col-sm-4">Priority</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.Priority == "High" ? "bg-danger" : 
+                                          Model.Priority == "Medium" ? "bg-warning" : "bg-info")">
+                            @Model.Priority
+                        </span>
+                    </dd>
+
+                    <dt class="col-sm-4">Status</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge @(Model.Status == "Completed" ? "bg-success" : 
+                                          Model.Status == "In Progress" ? "bg-warning" : "bg-danger")">
+                            @Model.Status
+                        </span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Comments))
+        {
+            <div class="mt-4">
+                <h5>Comments</h5>
+                <div class="card bg-dark">
+                    <div class="card-body">
+                        @Model.Comments
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="mt-4">
+            <form asp-action="UpdateStatus" method="post" class="row g-3 align-items-end">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="col-md-4">
+                    <label class="form-label">Update Status</label>
+                    <select name="status" class="form-select">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Add Comment</label>
+                    <textarea name="comment" class="form-control" rows="1">@Model.Comments</textarea>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-save me-2"></i>Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

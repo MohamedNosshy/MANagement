@@ -1,0 +1,60 @@
+@model IEnumerable<Mangement.Models.Leave>
+
+@{
+    ViewData["Title"] = "قائمة الإجازات";
+}
+
+<div class="container mt-4">
+    <h2>قائمة الإجازات</h2>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">طلب إجازة جديد</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>الموظف</th>
+                    <th>نوع الإجازة</th>
+                    <th>تاريخ البداية</th>
+                    <th>تاريخ النهاية</th>
+                    <th>الحالة</th>
+                    <th>تاريخ الطلب</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.User.Name</td>
+                        <td>@item.Type</td>
+                        <td>@item.StartDate.ToShortDateString()</td>
+                        <td>@item.EndDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge @(item.Status == "Approved" ? "bg-success" : 
+                                              item.Status == "Rejected" ? "bg-danger" : "bg-warning")">
+                                @item.Status
+                            </span>
+                        </td>
+                        <td>@item.RequestDate.ToShortDateString()</td>
+                        <td>
+                            @if (item.Status == "Pending")
+                            {
+                                <form asp-action="Approve" method="post" style="display: inline;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">موافقة</button>
+                                </form>
+                                <form asp-action="Reject" method="post" style="display: inline;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="text" name="reason" placeholder="سبب الرفض" class="form-control-sm" />
+                                    <button type="submit" class="btn btn-danger btn-sm">رفض</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 

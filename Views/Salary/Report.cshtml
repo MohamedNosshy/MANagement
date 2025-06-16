@@ -1,0 +1,69 @@
+@model IEnumerable<Mangement.Models.Salary>
+
+@{
+    ViewData["Title"] = "تقرير المرتبات";
+}
+
+<div class="container mt-4">
+    <h2>تقرير المرتبات</h2>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">من تاريخ</label>
+                    <input type="date" name="startDate" class="form-control" value="@ViewBag.StartDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">إلى تاريخ</label>
+                    <input type="date" name="endDate" class="form-control" value="@ViewBag.EndDate?.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary d-block">عرض التقرير</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>الموظف</th>
+                    <th>المرتب الأساسي</th>
+                    <th>البدلات</th>
+                    <th>الخصومات</th>
+                    <th>الإجمالي</th>
+                    <th>تاريخ الدفع</th>
+                    <th>حالة الدفع</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.User.Name</td>
+                        <td>@item.BaseSalary.ToString("C")</td>
+                        <td>@(item.Allowances?.ToString("C") ?? "0")</td>
+                        <td>@(item.Deductions?.ToString("C") ?? "0")</td>
+                        <td>@item.TotalSalary.ToString("C")</td>
+                        <td>@item.PaymentDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge @(item.IsPaid ? "bg-success" : "bg-warning")">
+                                @(item.IsPaid ? "تم الدفع" : "قيد الانتظار")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="table-info">
+                    <td colspan="4" class="text-end"><strong>الإجمالي:</strong></td>
+                    <td><strong>@Model.Sum(s => s.TotalSalary).ToString("C")</strong></td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div> 

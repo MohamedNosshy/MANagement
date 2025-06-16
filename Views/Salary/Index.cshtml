@@ -1,0 +1,57 @@
+@model IEnumerable<Mangement.Models.Salary>
+
+@{
+    ViewData["Title"] = "قائمة المرتبات";
+}
+
+<div class="container mt-4">
+    <h2>قائمة المرتبات</h2>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">إضافة مرتب جديد</a>
+        <a asp-action="Report" class="btn btn-info">تقرير المرتبات</a>
+    </p>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>الموظف</th>
+                    <th>المرتب الأساسي</th>
+                    <th>البدلات</th>
+                    <th>الخصومات</th>
+                    <th>الإجمالي</th>
+                    <th>تاريخ الدفع</th>
+                    <th>حالة الدفع</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.User.Name</td>
+                        <td>@item.BaseSalary.ToString("C")</td>
+                        <td>@(item.Allowances?.ToString("C") ?? "0")</td>
+                        <td>@(item.Deductions?.ToString("C") ?? "0")</td>
+                        <td>@item.TotalSalary.ToString("C")</td>
+                        <td>@item.PaymentDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge @(item.IsPaid ? "bg-success" : "bg-warning")">
+                                @(item.IsPaid ? "تم الدفع" : "قيد الانتظار")
+                            </span>
+                        </td>
+                        <td>
+                            @if (!item.IsPaid)
+                            {
+                                <form asp-action="UpdatePaymentStatus" method="post" style="display: inline;">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">تحديد كمدفوع</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 
