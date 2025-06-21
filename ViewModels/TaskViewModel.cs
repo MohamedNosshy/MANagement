@@ -18,6 +18,9 @@ namespace Mangement.ViewModels
         public int AssignedToId { get; set; }
 
         public string Status { get; set; } = "Pending";
+        public string Priority { get; set; } = "Medium";
+        public DateTime StartDate { get; set; }
+        public DateTime DueDate { get; set; }
         public string Comments { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime? CompletedAt { get; set; }

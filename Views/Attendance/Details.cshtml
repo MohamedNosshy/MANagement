@@ -1,0 +1,33 @@
+@model Mangement.Models.Attendance
+
+@{
+    ViewData["Title"] = "Attendance Details";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Attendance Details</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2">Employee</dt>
+                        <dd class="col-sm-10">@Model.User?.Name</dd>
+                        
+                        <dt class="col-sm-2">Check-in Date & Time</dt>
+                        <dd class="col-sm-10">@Model.InDate.ToString("yyyy-MM-dd HH:mm")</dd>
+                        
+                        <dt class="col-sm-2">Check-out Date & Time</dt>
+                        <dd class="col-sm-10">@Model.OutDate.ToString("yyyy-MM-dd HH:mm")</dd>
+                    </dl>
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

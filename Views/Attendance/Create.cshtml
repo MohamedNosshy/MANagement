@@ -1,0 +1,47 @@
+@model Mangement.Models.Attendance
+
+@{
+    ViewData["Title"] = "Create Attendance";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Create New Attendance Record</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="UserId" class="control-label">Employee</label>
+                            <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId">
+                                <option value="">-- Select Employee --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="InDate" class="control-label">Check-in Date & Time</label>
+                            <input asp-for="InDate" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="InDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="OutDate" class="control-label">Check-out Date & Time</label>
+                            <input asp-for="OutDate" type="datetime-local" class="form-control" />
+                            <span asp-validation-for="OutDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

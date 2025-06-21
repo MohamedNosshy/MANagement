@@ -1,11 +1,11 @@
 @model Mangement.ViewModels.TaskViewModel
 
 @{
-    ViewData["Title"] = "Create Task";
+    ViewData["Title"] = "إضافة مهمة جديدة";
 }
 
 <div class="container-fluid">
-    <h2 class="mb-4">Create New Task</h2>
+    <h2 class="mb-4">إضافة مهمة جديدة</h2>
 
     @if (TempData["Error"] != null)
     {
@@ -21,28 +21,28 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="mb-3">
-                    <label asp-for="Title" class="form-label"></label>
+                    <label asp-for="Title" class="form-label">العنوان</label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Description" class="form-label"></label>
+                    <label asp-for="Description" class="form-label">الوصف</label>
                     <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="AssignedToId" class="form-label">Assign To</label>
+                    <label asp-for="AssignedToId" class="form-label">تعيين إلى</label>
                     <select asp-for="AssignedToId" class="form-select" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "Name"))">
-                        <option value="">-- Select User --</option>
+                        <option value="">-- اختر الموظف --</option>
                     </select>
                     <span asp-validation-for="AssignedToId" class="text-danger"></span>
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-                    <button type="submit" class="btn btn-primary">Create Task</button>
+                    <a asp-action="Index" class="btn btn-secondary">رجوع للقائمة</a>
+                    <button type="submit" class="btn btn-primary">إنشاء المهمة</button>
                 </div>
             </form>
         </div>

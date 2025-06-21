@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Mangement.Models;
+using Mangement.Interfaces;
 
 namespace Mangement.Repositories
 {

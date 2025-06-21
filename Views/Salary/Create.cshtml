@@ -1,63 +1,64 @@
 @model Mangement.Models.Salary
 
 @{
-    ViewData["Title"] = "إضافة مرتب جديد";
+    ViewData["Title"] = "Create Salary Record";
 }
 
-<div class="container mt-4">
-    <h2>إضافة مرتب جديد</h2>
-
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="UserId" class="control-label">الموظف</label>
-                    <select asp-for="UserId" class="form-control">
-                        @foreach (var user in ViewBag.Users)
-                        {
-                            <option value="@user.Id">@user.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="UserId" class="text-danger"></span>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Create New Salary Record</h3>
                 </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="BaseSalary" class="control-label">المرتب الأساسي</label>
-                    <input asp-for="BaseSalary" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="BaseSalary" class="text-danger"></span>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="UserId" class="control-label">Employee</label>
+                            <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId">
+                                <option value="">-- Select Employee --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="BaseSalary" class="control-label">Base Salary</label>
+                            <input asp-for="BaseSalary" class="form-control" type="number" step="0.01" />
+                            <span asp-validation-for="BaseSalary" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Allowances" class="control-label">Allowances</label>
+                            <input asp-for="Allowances" class="form-control" type="number" step="0.01" />
+                            <span asp-validation-for="Allowances" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Deductions" class="control-label">Deductions</label>
+                            <input asp-for="Deductions" class="form-control" type="number" step="0.01" />
+                            <span asp-validation-for="Deductions" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PaymentDate" class="control-label">Payment Date</label>
+                            <input asp-for="PaymentDate" type="date" class="form-control" />
+                            <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Notes" class="control-label">Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input asp-for="IsPaid" class="form-check-input" />
+                                <label asp-for="IsPaid" class="form-check-label">Mark as Paid</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="Allowances" class="control-label">البدلات</label>
-                    <input asp-for="Allowances" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="Allowances" class="text-danger"></span>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="Deductions" class="control-label">الخصومات</label>
-                    <input asp-for="Deductions" class="form-control" type="number" step="0.01" />
-                    <span asp-validation-for="Deductions" class="text-danger"></span>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="PaymentDate" class="control-label">تاريخ الدفع</label>
-                    <input asp-for="PaymentDate" class="form-control" type="date" />
-                    <span asp-validation-for="PaymentDate" class="text-danger"></span>
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="Notes" class="control-label">ملاحظات</label>
-                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                    <span asp-validation-for="Notes" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <input type="submit" value="إنشاء" class="btn btn-primary" />
-                    <a asp-action="Index" class="btn btn-secondary">العودة للقائمة</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

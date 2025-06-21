@@ -1,17 +1,17 @@
-@model Mangement.Models.EmployeeTask
+@model Mangement.ViewModels.TaskViewModel
 
 @{
-    ViewData["Title"] = "Edit Task";
+    ViewData["Title"] = "تعديل المهمة";
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="fas fa-edit me-2"></i>Edit Task</h2>
+    <h2><i class="fas fa-edit me-2"></i>تعديل المهمة</h2>
     <div>
         <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-info">
-            <i class="fas fa-info-circle me-2"></i>Details
+            <i class="fas fa-info-circle me-2"></i>التفاصيل
         </a>
         <a asp-action="Index" class="btn btn-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Back to List
+            <i class="fas fa-arrow-left me-2"></i>رجوع للقائمة
         </a>
     </div>
 </div>
@@ -26,69 +26,69 @@
             
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label asp-for="Title" class="form-label">Title</label>
+                    <label asp-for="Title" class="form-label">العنوان</label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
                 
                 <div class="col-md-6 mb-3">
-                    <label asp-for="AssignedToId" class="form-label">Assigned To</label>
-                    <select asp-for="AssignedToId" class="form-select" asp-items="ViewBag.Users">
-                        <option value="">-- Select Employee --</option>
+                    <label asp-for="AssignedToId" class="form-label">المسؤول</label>
+                    <select asp-for="AssignedToId" class="form-select" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "Name"))">
+                        <option value="">-- اختر الموظف --</option>
                     </select>
                     <span asp-validation-for="AssignedToId" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Description" class="form-label">Description</label>
+                <label asp-for="Description" class="form-label">الوصف</label>
                 <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label asp-for="StartDate" class="form-label">Start Date</label>
+                    <label asp-for="StartDate" class="form-label">تاريخ البداية</label>
                     <input asp-for="StartDate" class="form-control" type="date" />
                     <span asp-validation-for="StartDate" class="text-danger"></span>
                 </div>
                 
                 <div class="col-md-4 mb-3">
-                    <label asp-for="DueDate" class="form-label">Due Date</label>
+                    <label asp-for="DueDate" class="form-label">تاريخ الاستحقاق</label>
                     <input asp-for="DueDate" class="form-control" type="date" />
                     <span asp-validation-for="DueDate" class="text-danger"></span>
                 </div>
                 
                 <div class="col-md-4 mb-3">
-                    <label asp-for="Priority" class="form-label">Priority</label>
+                    <label asp-for="Priority" class="form-label">الأولوية</label>
                     <select asp-for="Priority" class="form-select">
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High">High</option>
+                        <option value="Low">منخفضة</option>
+                        <option value="Medium">متوسطة</option>
+                        <option value="High">عالية</option>
                     </select>
                     <span asp-validation-for="Priority" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Status" class="form-label">Status</label>
+                <label asp-for="Status" class="form-label">الحالة</label>
                 <select asp-for="Status" class="form-select">
-                    <option value="Pending">Pending</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Completed">Completed</option>
+                    <option value="Pending">في الانتظار</option>
+                    <option value="In Progress">قيد التنفيذ</option>
+                    <option value="Completed">مكتملة</option>
                 </select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Comments" class="form-label">Comments</label>
+                <label asp-for="Comments" class="form-label">التعليقات</label>
                 <textarea asp-for="Comments" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Comments" class="text-danger"></span>
             </div>
 
             <div class="text-end">
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-2"></i>Save Changes
+                    <i class="fas fa-save me-2"></i>حفظ التغييرات
                 </button>
             </div>
         </form>

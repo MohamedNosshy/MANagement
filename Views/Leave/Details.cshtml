@@ -1,0 +1,60 @@
+@model Mangement.Models.Leave
+
+@{
+    ViewData["Title"] = "Leave Details";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Leave Request Details</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-2">Employee</dt>
+                        <dd class="col-sm-10">@Model.User?.Name</dd>
+                        
+                        <dt class="col-sm-2">Leave Type</dt>
+                        <dd class="col-sm-10">@Model.Type</dd>
+                        
+                        <dt class="col-sm-2">Start Date</dt>
+                        <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
+                        
+                        <dt class="col-sm-2">End Date</dt>
+                        <dd class="col-sm-10">@Model.EndDate.ToShortDateString()</dd>
+                        
+                        <dt class="col-sm-2">Duration</dt>
+                        <dd class="col-sm-10">@((Model.EndDate - Model.StartDate).Days + 1) days</dd>
+                        
+                        <dt class="col-sm-2">Status</dt>
+                        <dd class="col-sm-10">
+                            <span class="badge badge-@(Model.Status == "Approved" ? "success" : Model.Status == "Rejected" ? "danger" : "warning")">
+                                @Model.Status
+                            </span>
+                        </dd>
+                        
+                        <dt class="col-sm-2">Request Date</dt>
+                        <dd class="col-sm-10">@Model.RequestDate.ToString("yyyy-MM-dd HH:mm")</dd>
+                        
+                        @if (!string.IsNullOrEmpty(Model.Reason))
+                        {
+                            <dt class="col-sm-2">Reason</dt>
+                            <dd class="col-sm-10">@Model.Reason</dd>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(Model.RejectionReason))
+                        {
+                            <dt class="col-sm-2">Rejection Reason</dt>
+                            <dd class="col-sm-10">@Model.RejectionReason</dd>
+                        }
+                    </dl>
+                    <div>
+                        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\.net\\projects\\Mangement\\Mangement.csproj": {}
+    "D:\\pro\\Mangement\\Mangement.csproj": {}
   },
   "projects": {
-    "D:\\.net\\projects\\Mangement\\Mangement.csproj": {
+    "D:\\pro\\Mangement\\Mangement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\.net\\projects\\Mangement\\Mangement.csproj",
+        "projectUniqueName": "D:\\pro\\Mangement\\Mangement.csproj",
         "projectName": "Mangement",
-        "projectPath": "D:\\.net\\projects\\Mangement\\Mangement.csproj",
+        "projectPath": "D:\\pro\\Mangement\\Mangement.csproj",
         "packagesPath": "C:\\Users\\NOSSHY\\.nuget\\packages\\",
-        "outputPath": "D:\\.net\\projects\\Mangement\\obj\\",
+        "outputPath": "D:\\pro\\Mangement\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

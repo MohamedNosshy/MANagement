@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Mangement.Models;
 using Mangement.Interfaces;
 using Mangement.ViewModels;
 
 namespace Mangement.Controllers
 {
-    [Authorize]
     public class TaskController : Controller
     {
         private readonly ITaskService _taskService;
@@ -27,14 +25,14 @@ namespace Mangement.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(User.Identity?.Name))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-                var currentUser = await _userService.GetUserByEmailAsync(User.Identity.Name!);
+                // Get first user as default (for demo purposes)
+                var users = await _userService.GetAllUsersAsync();
+                var currentUser = users.FirstOrDefault();
+                
                 if (currentUser == null)
                 {
-                    return RedirectToAction("Login", "Account");
+                    TempData["Error"] = "No users found in the system.";
+                    return View(new List<TaskViewModel>());
                 }
 
                 IEnumerable<EmployeeTask> tasks;
@@ -53,6 +51,9 @@ namespace Mangement.Controllers
                     Title = t.Title,
                     Description = t.Description,
                     Status = t.Status,
+                    Priority = t.Priority,
+                    StartDate = t.StartDate,
+                    DueDate = t.DueDate,
                     Comments = t.Comments,
                     CreatedAt = t.CreatedAt,
                     CompletedAt = t.CompletedAt,
@@ -76,29 +77,30 @@ namespace Mangement.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(User.Identity?.Name))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-                var currentUser = await _userService.GetUserByEmailAsync(User.Identity.Name!);
+                var users = await _userService.GetAllUsersAsync();
+                var currentUser = users.FirstOrDefault();
+                
                 if (currentUser == null)
                 {
-                    return RedirectToAction("Login", "Account");
+                    TempData["Error"] = "No users found in the system.";
+                    return RedirectToAction(nameof(Index));
                 }
 
-                IEnumerable<User> users;
+                IEnumerable<User> availableUsers;
                 if (currentUser.isAdmin)
                 {
-                    users = await _userService.GetAllUsersAsync();
+                    availableUsers = await _userService.GetAllUsersAsync();
                 }
                 else
                 {
-                    users = await _userService.GetUsersByDepartmentAsync(currentUser.DepartmentId);
+                    availableUsers = await _userService.GetUsersByDepartmentAsync(currentUser.DepartmentId);
                 }
 
                 var viewModel = new TaskViewModel
                 {
-                    AvailableUsers = users
+                    AvailableUsers = availableUsers,
+                    StartDate = DateTime.Now,
+                    DueDate = DateTime.Now.AddDays(7)
                 };
 
                 return View(viewModel);
@@ -117,14 +119,13 @@ namespace Mangement.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(User.Identity?.Name))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-                var currentUser = await _userService.GetUserByEmailAsync(User.Identity.Name!);
+                var users = await _userService.GetAllUsersAsync();
+                var currentUser = users.FirstOrDefault();
+                
                 if (currentUser == null)
                 {
-                    return RedirectToAction("Login", "Account");
+                    TempData["Error"] = "No users found in the system.";
+                    return RedirectToAction(nameof(Index));
                 }
 
                 if (ModelState.IsValid)
@@ -134,7 +135,11 @@ namespace Mangement.Controllers
                         Title = viewModel.Title,
                         Description = viewModel.Description,
                         AssignedToId = viewModel.AssignedToId,
-                        CreatedById = currentUser.Id
+                        CreatedById = currentUser.Id,
+                        StartDate = viewModel.StartDate,
+                        DueDate = viewModel.DueDate,
+                        Priority = viewModel.Priority ?? "Medium",
+                        Status = "Pending"
                     };
 
                     await _taskService.CreateTaskAsync(task);
@@ -143,17 +148,17 @@ namespace Mangement.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                IEnumerable<User> users;
+                IEnumerable<User> availableUsers;
                 if (currentUser.isAdmin)
                 {
-                    users = await _userService.GetAllUsersAsync();
+                    availableUsers = await _userService.GetAllUsersAsync();
                 }
                 else
                 {
-                    users = await _userService.GetUsersByDepartmentAsync(currentUser.DepartmentId);
+                    availableUsers = await _userService.GetUsersByDepartmentAsync(currentUser.DepartmentId);
                 }
 
-                viewModel.AvailableUsers = users;
+                viewModel.AvailableUsers = availableUsers;
                 return View(viewModel);
             }
             catch (Exception ex)
@@ -164,32 +169,193 @@ namespace Mangement.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateStatus(int id, string status)
+        public async Task<IActionResult> Details(int id)
         {
             try
             {
-                if (string.IsNullOrEmpty(User.Identity?.Name))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-                var currentUser = await _userService.GetUserByEmailAsync(User.Identity.Name!);
-                if (currentUser == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-
                 var task = await _taskService.GetTaskByIdAsync(id);
                 if (task == null)
                 {
                     return NotFound();
                 }
 
-                // Check if user has permission to update status
-                if (!currentUser.isAdmin && task.AssignedToId != currentUser.Id && task.CreatedById != currentUser.Id)
+                var viewModel = new TaskViewModel
                 {
-                    TempData["Error"] = "You don't have permission to update this task's status.";
+                    Id = task.Id,
+                    Title = task.Title,
+                    Description = task.Description,
+                    Status = task.Status,
+                    Priority = task.Priority,
+                    StartDate = task.StartDate,
+                    DueDate = task.DueDate,
+                    Comments = task.Comments,
+                    CreatedAt = task.CreatedAt,
+                    CompletedAt = task.CompletedAt,
+                    AssignedToId = task.AssignedToId,
+                    CreatedById = task.CreatedById,
+                    AssignedTo = task.AssignedTo,
+                    CreatedBy = task.CreatedBy
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching task details");
+                TempData["Error"] = "An error occurred while loading task details.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            try
+            {
+                var task = await _taskService.GetTaskByIdAsync(id);
+                if (task == null)
+                {
+                    return NotFound();
+                }
+
+                var users = await _userService.GetAllUsersAsync();
+                var currentUser = users.FirstOrDefault();
+                
+                IEnumerable<User> availableUsers;
+                if (currentUser?.isAdmin == true)
+                {
+                    availableUsers = await _userService.GetAllUsersAsync();
+                }
+                else
+                {
+                    availableUsers = await _userService.GetUsersByDepartmentAsync(currentUser?.DepartmentId ?? 1);
+                }
+
+                var viewModel = new TaskViewModel
+                {
+                    Id = task.Id,
+                    Title = task.Title,
+                    Description = task.Description,
+                    Status = task.Status,
+                    Priority = task.Priority,
+                    StartDate = task.StartDate,
+                    DueDate = task.DueDate,
+                    Comments = task.Comments,
+                    AssignedToId = task.AssignedToId,
+                    AvailableUsers = availableUsers
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while loading edit task form");
+                TempData["Error"] = "An error occurred while loading the edit form.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, TaskViewModel viewModel)
+        {
+            try
+            {
+                if (id != viewModel.Id)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    var existingTask = await _taskService.GetTaskByIdAsync(id);
+                    if (existingTask == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingTask.Title = viewModel.Title;
+                    existingTask.Description = viewModel.Description;
+                    existingTask.AssignedToId = viewModel.AssignedToId;
+                    existingTask.StartDate = viewModel.StartDate;
+                    existingTask.DueDate = viewModel.DueDate;
+                    existingTask.Priority = viewModel.Priority ?? "Medium";
+                    existingTask.Status = viewModel.Status;
+
+                    await _taskService.UpdateTaskAsync(existingTask);
+                    
+                    TempData["Success"] = "Task updated successfully.";
                     return RedirectToAction(nameof(Index));
+                }
+
+                var users = await _userService.GetAllUsersAsync();
+                viewModel.AvailableUsers = users;
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while updating task");
+                TempData["Error"] = "An error occurred while updating the task.";
+                return View(viewModel);
+            }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var task = await _taskService.GetTaskByIdAsync(id);
+                if (task == null)
+                {
+                    return NotFound();
+                }
+
+                var viewModel = new TaskViewModel
+                {
+                    Id = task.Id,
+                    Title = task.Title,
+                    Description = task.Description,
+                    Status = task.Status,
+                    AssignedTo = task.AssignedTo,
+                    CreatedBy = task.CreatedBy
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while loading delete confirmation");
+                TempData["Error"] = "An error occurred while loading delete confirmation.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                await _taskService.DeleteTaskAsync(id);
+                TempData["Success"] = "Task deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while deleting task");
+                TempData["Error"] = "An error occurred while deleting the task.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus(int id, string status)
+        {
+            try
+            {
+                var task = await _taskService.GetTaskByIdAsync(id);
+                if (task == null)
+                {
+                    return NotFound();
                 }
 
                 await _taskService.UpdateTaskStatusAsync(id, status);
@@ -209,27 +375,10 @@ namespace Mangement.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(User.Identity?.Name))
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-                var currentUser = await _userService.GetUserByEmailAsync(User.Identity.Name!);
-                if (currentUser == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-
                 var task = await _taskService.GetTaskByIdAsync(id);
                 if (task == null)
                 {
                     return NotFound();
-                }
-
-                // Check if user has permission to add comment
-                if (!currentUser.isAdmin && task.AssignedToId != currentUser.Id && task.CreatedById != currentUser.Id)
-                {
-                    TempData["Error"] = "You don't have permission to add comments to this task.";
-                    return RedirectToAction(nameof(Index));
                 }
 
                 await _taskService.AddTaskCommentAsync(id, comment);

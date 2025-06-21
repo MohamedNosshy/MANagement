@@ -197,5 +197,21 @@ namespace Mangement.Services
                 throw;
             }
         }
+
+        public async Task<Dictionary<string, int>> GetTaskStatisticsAsync()
+        {
+            var totalTasks = await _context.EmployeeTasks.CountAsync();
+            var pendingTasks = await _context.EmployeeTasks.CountAsync(t => t.Status == "Pending");
+            var inProgressTasks = await _context.EmployeeTasks.CountAsync(t => t.Status == "In Progress");
+            var completedTasks = await _context.EmployeeTasks.CountAsync(t => t.Status == "Completed");
+
+            return new Dictionary<string, int>
+            {
+                ["Total"] = totalTasks,
+                ["Pending"] = pendingTasks,
+                ["InProgress"] = inProgressTasks,
+                ["Completed"] = completedTasks
+            };
+        }
     }
 } 

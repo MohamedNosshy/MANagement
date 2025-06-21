@@ -1,161 +1,227 @@
 ﻿@{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Home";
 }
 
-<div class="row">
-    <div class="col-md-3 mb-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <i class="fas fa-users fa-3x mb-3 text-primary"></i>
-                <h5 class="card-title">Total Employees</h5>
-                <h2 class="card-text">@ViewBag.TotalEmployees</h2>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="jumbotron text-center">
+                <h1 class="display-4">Welcome to Employee Management System</h1>
+                <p class="lead">Manage your employees, departments, tasks, attendance, leaves, and salaries efficiently.</p>
+                <hr class="my-4">
+                <p>Get started by exploring the different modules available in the navigation menu.</p>
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <i class="fas fa-building fa-3x mb-3 text-success"></i>
-                <h5 class="card-title">Departments</h5>
-                <h2 class="card-text">@ViewBag.TotalDepartments</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <i class="fas fa-tasks fa-3x mb-3 text-warning"></i>
-                <h5 class="card-title">Active Tasks</h5>
-                <h2 class="card-text">@ViewBag.ActiveTasks</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mb-4">
-        <div class="card">
-            <div class="card-body text-center">
-                <i class="fas fa-calendar-alt fa-3x mb-3 text-danger"></i>
-                <h5 class="card-title">Pending Leaves</h5>
-                <h2 class="card-text">@ViewBag.PendingLeaves</h2>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-tasks me-2"></i> Recent Tasks
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Total Employees</h5>
+                            <h2 class="card-text">@ViewBag.TotalUsers</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/User" class="text-white">View Employees <i class="fas fa-arrow-right"></i></a>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Assigned To</th>
-                                <th>Status</th>
-                                <th>Due Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Departments</h5>
+                            <h2 class="card-text">@ViewBag.TotalDepartments</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-building fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/Department" class="text-white">View Departments <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Active Tasks</h5>
+                            <h2 class="card-text">@ViewBag.ActiveTasks</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-tasks fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/Task" class="text-white">View Tasks <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="card-title">Pending Leaves</h5>
+                            <h2 class="card-text">@ViewBag.PendingLeaves</h2>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-calendar-alt fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/Leave" class="text-white">View Leaves <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Tasks</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentTasks != null && ViewBag.RecentTasks.Count > 0)
+                    {
+                        <div class="list-group list-group-flush">
                             @foreach (var task in ViewBag.RecentTasks)
                             {
-                                <tr>
-                                    <td>@task.Title</td>
-                                    <td>@task.AssignedTo.Name</td>
-                                    <td>
-                                        <span class="badge @(task.Status == "Completed" ? "bg-success" : 
-                                                          task.Status == "In Progress" ? "bg-warning" : "bg-danger")">
-                                            @task.Status
-                                        </span>
-                                    </td>
-                                    <td>@task.DueDate.ToString("MM/dd/yyyy")</td>
-                                </tr>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@task.Title</h6>
+                                        <small class="text-muted">Assigned to: @task.AssignedTo?.Name</small>
+                                    </div>
+                                    <span class="badge badge-@(task.Status == "Completed" ? "success" : task.Status == "In Progress" ? "warning" : "secondary")">
+                                        @task.Status
+                                    </span>
+                                </div>
                             }
-                        </tbody>
-                    </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No recent tasks found.</p>
+                    }
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-6 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-calendar-alt me-2"></i> Recent Leaves
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Employee</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Duration</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Leave Requests</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentLeaves != null && ViewBag.RecentLeaves.Count > 0)
+                    {
+                        <div class="list-group list-group-flush">
                             @foreach (var leave in ViewBag.RecentLeaves)
                             {
-                                <tr>
-                                    <td>@leave.User.Name</td>
-                                    <td>@leave.Type</td>
-                                    <td>
-                                        <span class="badge @(leave.Status == "Approved" ? "bg-success" : 
-                                                          leave.Status == "Pending" ? "bg-warning" : "bg-danger")">
-                                            @leave.Status
-                                        </span>
-                                    </td>
-                                    <td>@((leave.EndDate - leave.StartDate).Days + 1) days</td>
-                                </tr>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@leave.Type Leave</h6>
+                                        <small class="text-muted">@leave.User?.Name - @leave.StartDate.ToShortDateString() to @leave.EndDate.ToShortDateString()</small>
+                                    </div>
+                                    <span class="badge badge-@(leave.Status == "Approved" ? "success" : leave.Status == "Rejected" ? "danger" : "warning")">
+                                        @leave.Status
+                                    </span>
+                                </div>
                             }
-                        </tbody>
-                    </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No recent leave requests found.</p>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-md-12 mb-4">
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-money-bill-wave me-2"></i> Recent Salary Payments
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Employee</th>
-                                <th>Base Salary</th>
-                                <th>Allowances</th>
-                                <th>Deductions</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Salary Records</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.RecentSalaries != null && ViewBag.RecentSalaries.Count > 0)
+                    {
+                        <div class="list-group list-group-flush">
                             @foreach (var salary in ViewBag.RecentSalaries)
                             {
-                                <tr>
-                                    <td>@salary.User.Name</td>
-                                    <td>@salary.BaseSalary.ToString("C")</td>
-                                    <td>@salary.Allowances.ToString("C")</td>
-                                    <td>@salary.Deductions.ToString("C")</td>
-                                    <td>@salary.TotalSalary.ToString("C")</td>
-                                    <td>
-                                        <span class="badge @(salary.IsPaid ? "bg-success" : "bg-warning")">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">@salary.User?.Name</h6>
+                                        <small class="text-muted">Payment Date: @salary.PaymentDate.ToShortDateString()</small>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-weight-bold">@salary.TotalSalary.ToString("C")</div>
+                                        <span class="badge badge-@(salary.IsPaid ? "success" : "warning")">
                                             @(salary.IsPaid ? "Paid" : "Pending")
                                         </span>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                             }
-                        </tbody>
-                    </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No recent salary records found.</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Employee Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-right">
+                                <h4 class="text-primary">@ViewBag.TotalUsers</h4>
+                                <small class="text-muted">Total Employees</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-success">@ViewBag.TotalDepartments</h4>
+                            <small class="text-muted">Departments</small>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-right">
+                                <h4 class="text-warning">@ViewBag.ActiveTasks</h4>
+                                <small class="text-muted">Active Tasks</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-info">@ViewBag.PendingLeaves</h4>
+                            <small class="text-muted">Pending Leaves</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
