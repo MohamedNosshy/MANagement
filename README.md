@@ -3,7 +3,6 @@
 **MAN-AGEMENT** is a web-based company management system built with **ASP.NET Core MVC**.  
 It provides an all-in-one solution for handling **employees**, **departments**, **attendance**, and **tasks**, with secure role-based access.
 
-🔗 **Live Demo / Repo**: [GitHub - MANagement](https://github.com/MohamedNosshy/MANagement)
 
 ---
 
