@@ -29,12 +29,6 @@ It provides an all-in-one solution for handling **employees**, **departments**, 
 
 ---
 
-## 📸 Screenshots
-
-> *(Add some screenshots here if available — use relative paths or direct GitHub links)*
-
----
-
 ## 🧠 What I Learned
 
 As a **Full-Stack Developer**, I built this system from scratch and practiced:
@@ -51,12 +45,6 @@ As a **Full-Stack Developer**, I built this system from scratch and practiced:
 
 ### Prerequisites
 
-- .NET 6 SDK or higher
+- .NET 8 SDK or higher
 - SQL Server
 - Visual Studio / VS Code
-
-### Setup
-
-```bash
-git clone https://github.com/MohamedNosshy/MANagement.git
-cd MANagement
